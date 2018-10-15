@@ -3,6 +3,7 @@ package com.blx3;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.BV.LinearGradient.LinearGradientPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.tkporter.sendsms.SendSMSPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new LinearGradientPackage(),
           new SQLitePluginPackage(),
             new SplashScreenReactPackage(),
             SendSMSPackage.getInstance(),
