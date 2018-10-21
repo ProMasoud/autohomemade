@@ -107,11 +107,16 @@ export default class GeneralSettings extends Component {
                 d.getDate()
             )[2]
         ).slice(-2);
-        text += ("0" + d.getHours()).slice(-2);
-        text += ("0" + d.getMinutes()).slice(-2);
-        text += this.state.setting["ring"];
-        text += this.state.setting["helpLight"];
-        text += this.state.setting["waterOnOff"];
+        if (this.state.setting["ring"]) {
+            text += ("0" + this.state.hour).slice(-2);
+            text += ("0" + this.state.min).slice(-2);
+        } else {
+            text += ("0" + d.getHours()).slice(-2);
+            text += ("0" + d.getMinutes()).slice(-2);
+        }
+        text += this.state.setting["ring"] ? "1" : "0";
+        text += this.state.setting["helpLight"] ? "1" : "0";
+        text += this.state.setting["waterOnOff"] ? "1" : "0";
 
         console.log(text, text.length);
 
@@ -172,7 +177,7 @@ export default class GeneralSettings extends Component {
                                 this.setState(setting);
                             }}
                             value={
-                                this.state.setting.ring == "1.0" ? true : false
+                                this.state.setting.ring == "1" ? true : false
                             }
                         />
                         <Text style={st.settingText}>
@@ -258,13 +263,9 @@ export default class GeneralSettings extends Component {
                                 defaultValue={this.state.min.toString()}
                                 onChangeText={min => {
                                     if (min > 60) {
-                                        var setting = this.state;
-                                        setting["min"] = "00";
-                                        this.setState(setting);
+                                        this.setState({ min: "60" });
                                     } else {
-                                        var setting = this.state;
-                                        setting["min"] = min;
-                                        this.setState(setting);
+                                        this.setState({ min: min });
                                     }
                                 }}
                             />
@@ -277,13 +278,9 @@ export default class GeneralSettings extends Component {
                                 defaultValue={this.state.hour.toString()}
                                 onChangeText={hour => {
                                     if (hour > 24) {
-                                        var setting = this.state;
-                                        setting["hour"] = "00";
-                                        this.setState(setting);
+                                        this.setState({ hour: "00" });
                                     } else {
-                                        var setting = this.state;
-                                        setting["hour"] = hour;
-                                        this.setState(setting);
+                                        this.setState({ hour: hour });
                                     }
                                 }}
                             />
@@ -298,11 +295,6 @@ export default class GeneralSettings extends Component {
                                 maxLength={2}
                                 editable={false}
                                 defaultValue={this.state.min.toString()}
-                                onChangeText={min => {
-                                    var setting = this.state.time;
-                                    setting["min"] = min;
-                                    this.setState(setting);
-                                }}
                             />
                             <Text style={st.settingText}>:</Text>
                             <TextInput
@@ -312,11 +304,6 @@ export default class GeneralSettings extends Component {
                                 maxLength={2}
                                 editable={false}
                                 defaultValue={this.state.hour.toString()}
-                                onChangeText={hour => {
-                                    var setting = this.state.time;
-                                    setting["hour"] = hour;
-                                    this.setState(setting);
-                                }}
                             />
                         </View>
                     )}

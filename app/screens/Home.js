@@ -18,7 +18,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Buffer } from "buffer";
 global.Buffer = Buffer;
 const iconv = require("iconv-lite");
-import Overlay from "react-native-modal-overlay";
+import Modal from "react-native-modal";
 import SplashScreen from "react-native-splash-screen";
 import DB from "./../model/DbConfig";
 const { width } = Dimensions.get("window");
@@ -496,45 +496,52 @@ export default class Home extends Component {
                         خروج
                     </Text>
                 </TouchableOpacity>
-                <Overlay
-                    visible={this.state.connected ? false : true}
-                    animationType="zoomIn"
-                    containerStyle={{
-                        backgroundColor: "rgba(84, 160, 255, 0.40)"
-                    }}
-                    childrenWrapperStyle={{ backgroundColor: "#eee" }}
-                    animationDuration={300}
-                >
-                    {this.state.discovering ? (
-                        <View>
-                            <Text style={[st.itemText, { paddingBottom: 10 }]}>
-                                در حال جستجوی دستگاه ...
-                            </Text>
-                            <ActivityIndicator size="large" color="#54a0ff" />
-                        </View>
-                    ) : (
-                        <DeviceList
-                            connectedId={
-                                this.state.device && this.state.device.id
-                            }
-                            devices={this.state.unpairedDevices.concat(
-                                this.state.devices
-                            )}
-                            onDevicePress={device => this.onDevicePress(device)}
-                        />
-                    )}
-                    {this.state.discovering ? (
-                        <Button
-                            title="لغو جستجو"
-                            onPress={this.cancelDiscovery.bind(this)}
-                        />
-                    ) : (
-                        <Button
-                            title="تلاش دوباره"
-                            onPress={this.discoverUnpaired.bind(this)}
-                        />
-                    )}
-                </Overlay>
+                <Modal isVisible={this.state.connected ? false : true}>
+                    <View
+                        style={{
+                            backgroundColor: "#eee",
+                            borderRadius: 5,
+                            minHeight: 200
+                        }}
+                    >
+                        {this.state.discovering ? (
+                            <View>
+                                <Text
+                                    style={[st.itemText, { paddingBottom: 10 }]}
+                                >
+                                    در حال جستجوی دستگاه ...
+                                </Text>
+                                <ActivityIndicator
+                                    size="large"
+                                    color="#54a0ff"
+                                />
+                            </View>
+                        ) : (
+                            <DeviceList
+                                connectedId={
+                                    this.state.device && this.state.device.id
+                                }
+                                devices={this.state.unpairedDevices.concat(
+                                    this.state.devices
+                                )}
+                                onDevicePress={device =>
+                                    this.onDevicePress(device)
+                                }
+                            />
+                        )}
+                        {this.state.discovering ? (
+                            <Button
+                                title="لغو جستجو"
+                                onPress={this.cancelDiscovery.bind(this)}
+                            />
+                        ) : (
+                            <Button
+                                title="تلاش دوباره"
+                                onPress={this.discoverUnpaired.bind(this)}
+                            />
+                        )}
+                    </View>
+                </Modal>
             </View>
         );
     }

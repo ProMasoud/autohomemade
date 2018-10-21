@@ -10,7 +10,7 @@ import {
     ScrollView,
     BackHandler
 } from "react-native";
-import Overlay from "react-native-modal-overlay";
+import Modal from "react-native-modal";
 const { width } = Dimensions.get("window");
 const costomHeight = (width * 968) / 1080;
 import RadioForm from "react-native-simple-radio-button";
@@ -147,8 +147,8 @@ export default class Home extends Component {
     sendData = () => {
         let text = "1";
         text += ("0" + this.state.boxnum).slice(-2);
-        text += this.state.eat;
-        text += this.state.water;
+        text += parseInt(this.state.eat).toString();
+        text += this.state.water ? "1" : "0";
         text += this.state.time1 ? ("0" + this.state.time1).slice(-2) : "99";
         text += this.state.time2 ? ("0" + this.state.time2).slice(-2) : "99";
         text += this.state.time3 ? ("0" + this.state.time3).slice(-2) : "99";
@@ -174,6 +174,8 @@ export default class Home extends Component {
                 }
             );
         });
+        text += "   ";
+
         this.writePackets(text, text.length);
         this.setState({ popup: false });
     };
@@ -370,18 +372,9 @@ export default class Home extends Component {
                         خروج
                     </Text>
                 </TouchableOpacity>
-                <Overlay
-                    visible={this.state.popup}
-                    closeOnTouchOutside={true}
-                    animationType="zoomIn"
-                    // containerStyle={{
-                    //     backgroundColor: "rgba(84, 160, 255, 0.40)"
-                    // }}
-                    childrenWrapperStyle={{
-                        backgroundColor: "#eee",
-                        borderRadius: 5
-                    }}
-                    animationDuration={300}
+                <Modal
+                    isVisible={this.state.popup}
+                    onBackdropPress={() => this.setState({ popup: false })}
                 >
                     <ScrollView keyboardShouldPersistTaps={"handled"}>
                         <View style={st.popupTitle}>
@@ -495,7 +488,7 @@ export default class Home extends Component {
                                 defaultValue={this.state.time1.toString()}
                                 placeholder="09"
                                 onChangeText={text => {
-                                    if (text > 24) text = 24;
+                                    if (text > 23) text = 23;
                                     this.setState({ time1: text });
                                 }}
                             />
@@ -507,7 +500,7 @@ export default class Home extends Component {
                                 defaultValue={this.state.time2.toString()}
                                 placeholder="12"
                                 onChangeText={text => {
-                                    if (text > 24) text = 24;
+                                    if (text > 23) text = 23;
                                     this.setState({ time2: text });
                                 }}
                             />
@@ -519,7 +512,7 @@ export default class Home extends Component {
                                 defaultValue={this.state.time3.toString()}
                                 placeholder="16"
                                 onChangeText={text => {
-                                    if (text > 24) text = 24;
+                                    if (text > 23) text = 23;
                                     this.setState({ time3: text });
                                 }}
                             />
@@ -531,7 +524,7 @@ export default class Home extends Component {
                                 defaultValue={this.state.time4.toString()}
                                 placeholder="23"
                                 onChangeText={text => {
-                                    if (text > 24) text = 24;
+                                    if (text > 23) text = 23;
                                     this.setState({ time4: text });
                                 }}
                             />
@@ -604,7 +597,7 @@ export default class Home extends Component {
                             </TouchableOpacity>
                         </View>
                     </ScrollView>
-                </Overlay>
+                </Modal>
             </View>
         );
     }
